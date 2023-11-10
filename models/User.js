@@ -27,11 +27,6 @@ const userSchema = mongoose.Schema({
     created_on: {
         type: Date,
         default: Date.now
-    },
-
-    updated_on: {
-        type: Date,
-        default: Date.now
     }
 
 })
