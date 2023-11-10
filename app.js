@@ -8,6 +8,9 @@ require('dotenv/config')
 const app = express()
 app.use(bodyParser.json())
 
+const authRoute = require('./routes/auth')
+app.use('/api/user', authRoute)
+
 
 //Database connection
 mongoose.connect(process.env.DB_CONNECTOR).then(() => {

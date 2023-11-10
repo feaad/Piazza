@@ -1,4 +1,42 @@
 const express = require('express')
 const router = express.Router()
 
-const UserModel = require('../models/User')
+const User = require('../models/User')
+const { registerValidation, loginValidation } = require('../validations/validations')
+
+const bcrypt = require('bcryptjs')
+const jsonwebtoken = require('jsonwebtoken')
+
+//Validate registration input
+router.post('/register', async (req,res) => {
+    const { error } = registerValidation(req.body)
+    if (error) {
+        return res.status(400).send(error['details'][0]['message'])
+    }
+
+    // If the user already exists
+    const userExist = await User.findOne({ email: req.body.email })
+    if (userExist) {
+        return res.status(400).send({ message: 'User already exists' })
+    }
+
+    //Hashing password for security
+    const salt = await bcrypt.genSalt(5)
+    const passwordHash = await bcrypt.hash(req.body.password, salt)
+
+    //Register and add new user
+    const user = new User({
+        username: req.body.username,
+        email: req.body.email,
+        password: passwordHash
+    })
+    try {
+        const newUser = await user.save()
+        res.send(newUser)
+    }
+    catch (err) {
+        res.status(400).send({message:err})
+    }
+})
+
+module.exports = router
