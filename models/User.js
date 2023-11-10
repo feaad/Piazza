@@ -1,5 +1,7 @@
 const mongoose = require('mongoose')
 
+
+// Generate a user schema
 const userSchema = mongoose.Schema({
     username: {
         type: String,
@@ -12,7 +14,7 @@ const userSchema = mongoose.Schema({
         type: String,
         require: true,
         min: 6,
-        max: 255
+        max: 256
     },
 
     password: {
