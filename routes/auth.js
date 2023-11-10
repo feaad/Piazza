@@ -47,13 +47,20 @@ router.post('/login', async (req, res) => {
     }
 
     //Check if user exists
-    const userExist = await User.findOne({ email: req.body.email })
-    if (!userExist) {
+    const user = await User.findOne({ email: req.body.email })
+    if (!user) {
         return res.status(400).send({ message: 'User does not exists' })
     }
 
     //Check user password
-    const passwordCheck = await bcrypt.compare(req.body.password)
+    const passwordCheck = await bcrypt.compare(req.body.password, user.password)
+    if (!passwordCheck) {
+        return res.status(400).send({message: 'Password is invalid'})
+    }
+
+    //Authentication Token
+    const token = jsonwebtoken.sign({ _id: user.id }, process.env.TOKEN)
+    res.header('auth-token', token).send({'auth-token': token})
 })
 
 module.exports = router
