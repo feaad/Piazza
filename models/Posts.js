@@ -15,7 +15,7 @@ const postSchema = mongoose.Schema({
         type: String,
         required: true,
         min: 5,
-        max: 1024
+        max: 256
     },
 
     message: {
