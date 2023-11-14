@@ -23,8 +23,8 @@ router.post('/', verifyToken, async (req, res) => {
     //set the expiry to the new date
 
     const currentDate = new Date();
-    const expiryDate = new Date();
-    expiryDate.setDate(currentDate.getDate() + 1);
+    const expiryDate = new Date(currentDate.getDate() + 3)
+
 
     //Set status of the post
     //status is initially set to Live, when the date changes to the
@@ -32,13 +32,13 @@ router.post('/', verifyToken, async (req, res) => {
 
     //Like and Dislike method
 
-    
     const post = new Posts({
         user_id: req.user._id,
         author: username,
         topic: req.body.topic,
         title: req.body.title,
         message: req.body.message,
+        status: 'Live',
         expiry_date: expiryDate
     })
     try {
@@ -59,5 +59,6 @@ router.get('/', verifyToken, async (req, res) => {
         res.send({message:err})
     }
 })
+
 
 module.exports = router

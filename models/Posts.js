@@ -1,8 +1,9 @@
+const { object } = require('joi')
 const mongoose = require('mongoose')
 
 const postSchema = mongoose.Schema({
     user_id: {
-        type: String
+        type: mongoose.Schema.Types.ObjectId,
     },
 
     topic: {
@@ -38,13 +39,13 @@ const postSchema = mongoose.Schema({
     },
 
     status: {
-        type: Boolean
+        type: String
     },
 
     created_on: {
         type: Date,
         required: true,
-        default: Date.now()
+        default: new Date()
     },
     expiry_date: {
         type: Date
