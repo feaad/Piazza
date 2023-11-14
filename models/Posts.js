@@ -1,10 +1,9 @@
 const mongoose = require('mongoose')
 
 const postSchema = mongoose.Schema({
-    // user_id: {
-    //     type: String,
-    //     required: true
-    // },
+    user_id: {
+        type: String
+    },
 
     topic: {
         type: String,
@@ -26,13 +25,8 @@ const postSchema = mongoose.Schema({
     },
 
      author: {
-        type: String,
-        required: true
+        type: String
         
-    },
-
-    expiry_date: {
-        type: Date
     },
 
     likes: {
@@ -51,6 +45,9 @@ const postSchema = mongoose.Schema({
         type: Date,
         required: true,
         default: Date.now()
+    },
+    expiry_date: {
+        type: Date
     }
 })
 

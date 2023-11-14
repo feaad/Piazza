@@ -25,8 +25,7 @@ const postValidation = (data) => {
     const schemaValidation = joi.object({
         topic: joi.string().required(),
         title: joi.string().min(5).max(256).required(),
-        message: joi.string().min(3).max(280).required(),
-        author: joi.string().required()
+        message: joi.string().min(3).max(280).required()
     })
     return schemaValidation.validate(data)
 }
