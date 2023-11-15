@@ -1,9 +1,8 @@
-const { object } = require('joi')
 const mongoose = require('mongoose')
 
 const postSchema = mongoose.Schema({
     user_id: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId
     },
 
     topic: {
@@ -30,9 +29,14 @@ const postSchema = mongoose.Schema({
         
     },
 
-    likes: {
-        type: Number
-    },
+    likes: [{
+        // type: Number
+        type: mongoose.Schema.Types.ObjectId
+        
+    }],
+    // likes: {
+    //     type: Number
+    // },
 
     dislikes: {
         type: Number

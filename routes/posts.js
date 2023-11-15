@@ -25,12 +25,7 @@ router.post('/', verifyToken, async (req, res) => {
     const currentDate = new Date();
     const expiryDate = new Date(currentDate.getDate() + 3)
 
-
-    //Set status of the post
-    //status is initially set to Live, when the date changes to the
-    //expiry date, status should now be set to expired
-
-    //Like and Dislike method
+    // const likeNumber = 0;
 
     const post = new Posts({
         user_id: req.user._id,
@@ -59,6 +54,14 @@ router.get('/', verifyToken, async (req, res) => {
         res.send({message:err})
     }
 })
+
+//Like and Dislike method
+//Author of post can not like or dislike their post
+
+// router.patch('/', verifyToken, async (req, res) => {
+
+    
+// })
 
 
 module.exports = router

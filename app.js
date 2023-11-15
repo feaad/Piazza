@@ -20,6 +20,10 @@ app.use('/api/topic', topicRoute)
 const postRoute = require('./routes/posts')
 app.use('/api/post', postRoute)
 
+//Route to likes
+const likesRoute = require('./routes/likes')
+app.use('/api/likes', likesRoute)
+
 
 //Database connection
 mongoose.connect(process.env.DB_CONNECTOR).then(() => {
