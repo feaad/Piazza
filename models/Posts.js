@@ -30,9 +30,7 @@ const postSchema = mongoose.Schema({
     },
 
     likes: [{
-        // type: Number
         type: mongoose.Schema.Types.ObjectId
-        
     }],
 
     dislikes: {
@@ -48,7 +46,7 @@ const postSchema = mongoose.Schema({
         required: true,
         default: new Date()
     },
-    expires_in: {
+    expires_on: {
         type: Date,
         required: true
     }

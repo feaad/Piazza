@@ -26,7 +26,7 @@ const postValidation = (data) => {
         topic: joi.string().required(),
         title: joi.string().min(5).max(256).required(),
         message: joi.string().min(3).max(280).required(),
-        expires_in: joi.number().required()
+        expires_on: joi.number().required()
     })
     return schemaValidation.validate(data)
 }

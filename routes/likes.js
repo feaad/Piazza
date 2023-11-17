@@ -31,7 +31,7 @@ router.post('/:post_id', verifyToken, async (req, res) => {
                     await Posts.updateOne({
                         _id: postById
                     }, {
-                        $push: {
+                        $set: {
                             likes: savedLikes._id
                         }
                     })

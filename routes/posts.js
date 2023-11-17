@@ -19,14 +19,13 @@ router.post('/', verifyToken, async (req, res) => {
     const username = getUserById.username
 
     //Set the expiry date
-    //get Date.now and add 3 days to obtain the expiry date
     //set the expiry to the new date
 
     // const currentDate = new Date();
     // const expiryDate = new Date(currentDate.getDate() + 3)
 
     const currentDate = new Date();
-    const expiryDate = currentDate.setDate(currentDate.getDate() + req.body.expires_in)
+    const expiryDate = currentDate.setDate(currentDate.getDate() + req.body.expires_on)
 
     // const likeNumber = 0;
 
@@ -37,7 +36,7 @@ router.post('/', verifyToken, async (req, res) => {
         title: req.body.title,
         message: req.body.message,
         status: 'Live',
-        expires_in: expiryDate
+        expires_on: expiryDate
     })
     try {
         const savePost = await post.save()
