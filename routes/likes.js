@@ -6,16 +6,20 @@ const Posts = require('../models/Posts')
 const verifyToken = require('../VerifyToken')
 const e = require('express')
 
+
 // Update likes for a post
 //things to do -> author of post can not like
 //sending a like when already liked deletes the like
 router.post('/:post_id', verifyToken, async (req, res) => {
     try {
         const postById = await Posts.findById(req.params.post_id)
-        if (!postById) {
+        //check if status is live
+        if(!postById){
             return res.status(400).send({message:'Can not find post'})
+        } else if (postById.status === 'Expired') { 
+            return res.status(405).send({message:'Post has expired'})
         }
-        else {
+        else{
             const currentUser = req.user;
             const postLike = await Likes.findOne({
                 post_id: postById, user_id: currentUser._id
@@ -55,12 +59,10 @@ router.post('/:post_id', verifyToken, async (req, res) => {
                 })
                 return res.status(200).send({message: 'Like removed'})
             }
-            // return res.send(postById)
         }
-        
     }
     catch (err) {
-        res.send({message:'can not find post'})
+        res.send({message:err})
     }
 })
 

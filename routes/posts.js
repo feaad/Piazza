@@ -25,7 +25,8 @@ router.post('/', verifyToken, async (req, res) => {
     // const expiryDate = new Date(currentDate.getDate() + 3)
 
     const currentDate = new Date();
-    const expiryDate = currentDate.setDate(currentDate.getDate() + req.body.expires_on)
+    const expiryDate = new Date(currentDate.getTime() + (req.body.expires_on * 60000));
+    // const expiryDate = currentDate.setDate(currentDate.getDate() + req.body.expires_on)
 
     // const likeNumber = 0;
 
@@ -57,13 +58,6 @@ router.get('/', verifyToken, async (req, res) => {
     }
 })
 
-//Like and Dislike method
-//Author of post can not like or dislike their post
-
-// router.patch('/', verifyToken, async (req, res) => {
-
-    
-// })
 
 
 module.exports = router
