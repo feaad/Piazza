@@ -7,9 +7,6 @@ const Posts = require('../models/Posts')
 const verifyToken = require('../VerifyToken')
 
 // TODO: Use the appropriate http response codes
-// Update likes for a post
-//things to do -> author of post can not like
-//sending a like when already liked deletes the like
 router.post('/:post_id', verifyToken, async (req, res) => {
     try {
         const postById = await Posts.findById(req.params.post_id)
@@ -87,6 +84,7 @@ router.post('/:post_id', verifyToken, async (req, res) => {
         res.send({message:err})
     }
 })
+
 
 
 

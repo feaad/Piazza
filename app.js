@@ -28,6 +28,10 @@ app.use('/api/likes', likesRoute)
 const dislikesRoute = require('./routes/dislikes')
 app.use('/api/dislikes', dislikesRoute)
 
+//Route to comments
+const commentsRoute = require('./routes/comments')
+app.use('/api/comment', commentsRoute)
+
 //Database connection
 mongoose.connect(process.env.DB_CONNECTOR).then(() => {
     console.log('DB is running...')
