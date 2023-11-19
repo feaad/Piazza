@@ -30,7 +30,7 @@ app.use('/api/dislikes', dislikesRoute)
 
 //Route to comments
 const commentsRoute = require('./routes/comments')
-app.use('/api/comment', commentsRoute)
+app.use('/api/comments', commentsRoute)
 
 //Database connection
 mongoose.connect(process.env.DB_CONNECTOR).then(() => {

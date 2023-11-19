@@ -5,40 +5,51 @@ const Comments = require('../models/Comments')
 const Posts = require('../models/Posts')
 const verifyToken = require('../VerifyToken')
 
-router.post(':/post_id', verifyToken, async (req, res) => {
+const { commentValidation } = require('../validations/validations')
+
+router.post('/:post_id', verifyToken, async (req, res) => {
     try {
         const postById = await Posts.findById(req.params.post_id)
+
+        //check if post exists
         if (!postById) {
-            res.status(400).send({message:'Post does not exist'})
+            res.status(400).send({message:'Can not find post'})
         }
+
+        //check if post is Live
         else if (postById.status === 'Expired') {
-            res.status(400).send({ message: 'Post has expired'})
+            return res.status(405).send({message: 'Post has expired'})
         }
+
         else {
             const currentUser = req.user
-            const commentCount = await Comments.countDocument({post_id:postById})
-            const newComment = new Comments({
+            const commentCount = await Comments.countDocuments({post_id: postById})
+            const comment = new Comments({
                 post_id: postById,
                 user_id: currentUser._id,
                 comments: req.body.comments
             })
-            await newComment.save()
+            try {
+                const saveComment = await comment.save()
+                res.send(saveComment)
 
-            //Update Post collection to show number of comments for a post
-            await Posts.updateOne({
-                _id: postById
-            }, {
-                $set: {
-                    comments: commentCount + 1
-                }
-            })
-            res.status(200).send({message:'Message added'})
+                await Posts.updateOne({
+                    _id:postById
+                }, {
+                    $set: {
+                        comments: commentCount + 1
+                    }
+                })
+            }
+            catch (err) {
+                res.send({message: err})
+            }
         }
+
+        res.send(postById)
     }
     catch (err) {
         res.send({message:err})
     }
 })
-
-
 module.exports = router

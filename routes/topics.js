@@ -18,7 +18,7 @@ const verifyToken = require('../VerifyToken')
 //     }
 // })
 
-
+//Get all topics in database
 router.get('/', verifyToken, async (req, res) => {
     try {
         const topics = await Topic.find({}, {
@@ -31,6 +31,9 @@ router.get('/', verifyToken, async (req, res) => {
         res.send({message:err})
     }
 })
+
+//Search by topics
+// router.get()
 
 
 module.exports = router

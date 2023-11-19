@@ -37,11 +37,16 @@ const postSchema = mongoose.Schema({
         type: Number
     },
 
+    comments: {
+        type: Number
+    },
+
     status: {
         type: String,
         enum: ['Live', 'Expired'],
         default: 'Live'
     },
+
 
     created_on: {
         type: Date,
