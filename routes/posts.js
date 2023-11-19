@@ -2,6 +2,8 @@ const express = require('express')
 const router = express.Router()
 
 const Posts = require('../models/Posts')
+const Likes = require('../models/Likes')
+
 const verifyToken = require('../VerifyToken')
 const User = require('../models/User')
 
@@ -51,6 +53,51 @@ router.get('/', verifyToken, async (req, res) => {
     try {
         const posts = await Posts.find()
         res.send(posts)
+    }
+    catch (err) {
+        res.send({message:err})
+    }
+})
+
+//get post with max dislikes
+router.get('/activePostsByDislikes', verifyToken, async (req, res) => {
+    try {
+        const test = await Posts.find().sort("-dislikes").limit(1)
+        res.send(test)
+    }
+    catch (err) {
+        res.send({message: err})
+    }
+})
+
+//get post with max likes
+router.get('/activePostsByLikes', verifyToken, async (req, res) => {
+    try {
+        const test = await Posts.find().sort("-likes").limit(1)
+        res.send(test)
+    }
+    catch (err) {
+        res.send({message: err})
+    }
+})
+
+
+//get post with max comments
+router.get('/activePostsByComments', verifyToken, async (req, res) => {
+    try {
+        const test = await Posts.find().sort("-comments").limit(1)
+        res.send(test)
+    }
+    catch (err) {
+        res.send({message: err})
+    }
+})
+
+//get all expired posts
+router.get('/history', verifyToken, async (req, res) => {
+    try {
+        const history = await Posts.find().sort("Expired")
+        res.send(history)
     }
     catch (err) {
         res.send({message:err})
