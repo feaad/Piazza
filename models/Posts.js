@@ -29,16 +29,18 @@ const postSchema = mongoose.Schema({
         
     },
 
-    likes: [{
-        type: mongoose.Schema.Types.ObjectId
-    }],
+    likes:{
+        type: Number
+    },
 
     dislikes: {
         type: Number
     },
 
     status: {
-        type: String
+        type: String,
+        enum: ['Live', 'Expired'],
+        default: 'Live'
     },
 
     created_on: {

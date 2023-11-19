@@ -24,6 +24,9 @@ app.use('/api/post', postRoute)
 const likesRoute = require('./routes/likes')
 app.use('/api/likes', likesRoute)
 
+//Route to dislikes
+const dislikesRoute = require('./routes/dislikes')
+app.use('/api/dislikes', dislikesRoute)
 
 //Database connection
 mongoose.connect(process.env.DB_CONNECTOR).then(() => {

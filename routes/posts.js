@@ -36,7 +36,6 @@ router.post('/', verifyToken, async (req, res) => {
         topic: req.body.topic,
         title: req.body.title,
         message: req.body.message,
-        status: 'Live',
         expires_on: expiryDate
     })
     try {

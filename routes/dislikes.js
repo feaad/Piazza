@@ -1,8 +1,8 @@
 const express = require('express')
 const router = express.Router()
 
-const Likes = require('../models/Likes')
 const Dislikes = require('../models/Dislikes')
+const Likes = require('../models/Likes')
 const Posts = require('../models/Posts')
 const verifyToken = require('../VerifyToken')
 
@@ -13,7 +13,6 @@ const verifyToken = require('../VerifyToken')
 router.post('/:post_id', verifyToken, async (req, res) => {
     try {
         const postById = await Posts.findById(req.params.post_id)
-
         //check if status is live
         if(!postById){
             return res.status(400).send({message:'Can not find post'})
@@ -25,68 +24,62 @@ router.post('/:post_id', verifyToken, async (req, res) => {
         }
         else{
             const currentUser = req.user;
+            const dislikeCount = await Dislikes.countDocuments({ post_id: postById })
             const likeCount = await Likes.countDocuments({ post_id: postById })
-            const dislikeCount = await Dislikes.countDocuments({post_id:postById})
-            const postLike = await Likes.findOne({
+            const postDislike = await Dislikes.findOne({
                 post_id: postById, user_id: currentUser._id
             })
-
-            const dislikePost = await Dislikes.findOne({
+            const likePost = await Likes.findOne({
                 post_id: postById, user_id: currentUser
             })
-            if (!postLike) {
-                const newLike = new Likes({
+            if (!postDislike) {
+                const newDislike = new Dislikes({
                     post_id: postById,
                     user_id: currentUser._id
                 })
                 try {
-                    
-                    //Add new like to Likes collection
-                    await newLike.save()
-
-                    //Update post with the new like
+                    //Add new dislike to Dislikes collection
+                    await newDislike.save()
+                    //Update post with the new dislike
                     await Posts.updateOne({
                         _id: postById
                     }, {
                         $set: {
-                            likes: likeCount + 1,
-                            dislikes: dislikeCount - 1
+                            dislikes: dislikeCount + 1
                         }
                     })
 
-                    //Delete dislike if user previously disliked the post
-                    await Dislikes.deleteOne({
-                        _id: dislikePost._id
+                    //Delete like, if user already liked the post
+                    await Likes.deleteOne({
+                        _id: likePost._id
                     })
                     await Posts.updateOne({
-                        _id: dislikePost.post_id
+                        _id: likePost.post_id
                     }, {
                         $set: {
-                            dislikes: dislikeCount -1
+                            likes: likeCount - 1
                         }
                     })
-                    return res.status(200).send({message: 'Like added'})
+
+                    return res.status(200).send({message: 'dislike added'})
                 }
                 catch (err) {
                     res.status(400).send({message:err})
                 }
-                
             }
-            
             //if the post has been liked already, delete the like
             else {
-                await Likes.deleteOne({
-                    _id: postLike._id
+                await Dislikes.deleteOne({
+                    _id: postDislike._id
                 })
                 await Posts.updateOne({
-                    _id: postLike.post_id
+                    _id: postDislike.post_id
                 }, {
-                    $set: {
-                        likes: likeCount - 1,
-
+                    $unset: {
+                        dislikes: dislikeCount - 1
                     }
                 })
-                return res.status(200).send({message: 'Like removed'})
+                return res.status(200).send({message: 'Dislike removed'})
             }
         }
     }
