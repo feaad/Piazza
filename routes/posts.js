@@ -81,7 +81,6 @@ router.get("/activePostsByLikes", verifyToken, async (req, res) => {
 
 //Find the most active Posts
 router.get("/activePost", verifyToken, async (req, res) => {
-
 	const test = Posts.aggregate()
 		.project({
 			user_id: 1,
@@ -90,27 +89,26 @@ router.get("/activePost", verifyToken, async (req, res) => {
 			message: 1,
 			likes: 1,
 			dislikes: 1,
-            author: 1,
-            comment:1,
-			// },
-			// { total: { $add: ["$likes", "$dislikes"] } }
+			author: 1,
+			comment: 1,
 			total: { $add: ["$likes", "$dislikes"] },
 		})
 		.sort({ total: "desc" })
 		.limit(1);
-	test.project({
-		user_id: 1,
-		status: 1,
-		title: 1,
-		message: 1,
-		likes: 1,
-		dislikes: 1,
-		author: 1,
-	})
-	.then((result) => {
-		res.send(result);
-	})
-	.catch((error) => console.log(error));
+	test
+		.project({
+			user_id: 1,
+			status: 1,
+			title: 1,
+			message: 1,
+			likes: 1,
+			dislikes: 1,
+			author: 1,
+		})
+		.then((result) => {
+			res.send(result);
+		})
+		.catch((error) => console.log(error));
 });
 
 //get post with max comments
