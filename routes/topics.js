@@ -19,12 +19,23 @@ const verifyToken = require('../VerifyToken')
 // })
 
 //Get all topics in database
+// router.get('/', verifyToken, async (req, res) => {
+//     try {
+//         const topics = await Topic.find({}, {
+//             topic_name: 1,
+//             _id:0
+//         })
+//         res.send(topics)
+//     }
+//     catch(err) {
+//         res.send({message:err})
+//     }
+// })
+
+
 router.get('/', verifyToken, async (req, res) => {
     try {
-        const topics = await Topic.find({}, {
-            topic_name: 1,
-            _id:0
-        })
+        const topics = await Topic.find()
         res.send(topics)
     }
     catch(err) {

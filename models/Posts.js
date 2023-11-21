@@ -5,8 +5,14 @@ const postSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId
     },
 
-    topic: {
-        type: String,
+    // topic: {
+    //     type: String,
+    //     required: true
+    // },
+    topic_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        max: 24,
+        min: 24,
         required: true
     },
 
@@ -30,15 +36,18 @@ const postSchema = mongoose.Schema({
     },
 
     likes:{
-        type: Number
+        type: Number,
+        default: 0
     },
 
     dislikes: {
-        type: Number
+        type: Number,
+        default: 0
     },
 
     comments: {
-        type: Number
+        type: Number,
+        default: 0
     },
 
     status: {
