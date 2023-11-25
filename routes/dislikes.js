@@ -6,7 +6,6 @@ const Likes = require("../models/Likes");
 const Posts = require("../models/Posts");
 const verifyToken = require("../VerifyToken");
 
-// TODO: Use the appropriate http response codes
 router.post("/:post_id", verifyToken, async (req, res) => {
 	// check if post is available, live and the current user is not the
 	// author of the post

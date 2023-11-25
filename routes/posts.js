@@ -149,15 +149,19 @@ router.get("/history", verifyToken, async (req, res) => {
 router.get("/history/:topic_id", verifyToken, async (req, res) => {
 	try {
 		const historyPost = await Posts.find({
-			topic_id: req.params.topic_id,
+			topic_id: req.params.topic_id
 		}).sort("Expired");
 		res.send(historyPost)
+
 	} catch (err) {
 		res.send({message:err})
 	}
 })
 
-//Retrieve all topics
+
+
+
+// Retrieve all topics
 router.get("/:topic_id", verifyToken, async (req, res) => {
 	try {
 		const topic = await Posts.find({ topic_id: req.params.topic_id });

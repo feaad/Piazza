@@ -6,7 +6,7 @@ const Dislikes = require("../models/Dislikes");
 const Posts = require("../models/Posts");
 const verifyToken = require("../VerifyToken");
 
-// TODO: Use the appropriate http response codes
+
 // Update likes for a post
 router.post("/:post_id", verifyToken, async (req, res) => {
 	try {
@@ -27,7 +27,7 @@ router.post("/:post_id", verifyToken, async (req, res) => {
 
 			const postLike = await Likes.findOne({
 				post_id: postById,
-				user_id: currentUser._id,
+				user_id: currentUser._id
 			});
 
 			const dislikePost = await Dislikes.findOne({
