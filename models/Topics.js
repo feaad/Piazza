@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 
+// Creating a comments schema
 const topicSchema = mongoose.Schema({
     topic_name: {
         type: String,

@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 
+// Creating a comments schema
 const commentSchema = mongoose.Schema({
     post_id: {
         type: mongoose.Schema.Types.ObjectId

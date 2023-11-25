@@ -8,25 +8,23 @@ const verifyToken = require("../VerifyToken");
 
 // TODO: Use the appropriate http response codes
 // Update likes for a post
-//things to do -> author of post can not like
-//sending a like when already liked deletes the like
 router.post("/:post_id", verifyToken, async (req, res) => {
 	try {
 		const postById = await Posts.findById(req.params.post_id);
 
-		//check if status is live
+		// check if post is available, live and the current user is not the
+		// author of the post
 		if (!postById) {
-			return res.status(400).send({ message: "Can not find post" });
+			return res.status(404).send({ message: "Can not find post" });
 		} else if (postById.status === "Expired") {
 			return res.status(405).send({ message: "Post has expired" });
 		} else if (postById.user_id.toString() === req.user._id) {
-			return res
-				.status(400)
-				.send({ message: "You can not like your own post" });
+			return res.status(405).send({ message: "You can not like your own post" });
 		} else {
 			const currentUser = req.user;
 			const likeCount = await Likes.countDocuments({ post_id: postById });
 			const dislikeCount = await Dislikes.countDocuments({ post_id: postById });
+
 			const postLike = await Likes.findOne({
 				post_id: postById,
 				user_id: currentUser._id,
@@ -52,8 +50,7 @@ router.post("/:post_id", verifyToken, async (req, res) => {
 						},
 						{
 							$set: {
-								likes: likeCount + 1,
-								// dislikes: dislikeCount - 1
+								likes: likeCount + 1
 							},
 						}
 					);
@@ -79,13 +76,13 @@ router.post("/:post_id", verifyToken, async (req, res) => {
 						);
 					}
 
-					return res.status(200).send({ message: "Like added" });
+					return res.status(200).send({ message: "Post Liked" });
 				} catch (err) {
 					res.status(400).send({ message: err });
 				}
 			}
 
-			//if the post has been liked already, delete the like
+			//If user clicks like twice, delete like
 			else {
 				await Likes.deleteOne({
 					_id: postLike._id,
@@ -100,7 +97,7 @@ router.post("/:post_id", verifyToken, async (req, res) => {
 						},
 					}
 				);
-				return res.status(200).send({ message: "Like removed" });
+				return res.status(200).send({ message: "Post unliked" });
 			}
 		}
 	} catch (err) {
@@ -109,3 +106,6 @@ router.post("/:post_id", verifyToken, async (req, res) => {
 });
 
 module.exports = router;
+
+
+

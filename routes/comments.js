@@ -8,12 +8,17 @@ const verifyToken = require('../VerifyToken')
 const { commentValidation } = require('../validations/validations')
 
 router.post('/:post_id', verifyToken, async (req, res) => {
+    const { error } = commentValidation(req.body);
+		if (error) {
+			return res.status(400).send(error["details"][0]["message"]);
+        }
+    
     try {
         const postById = await Posts.findById(req.params.post_id)
 
         //check if post exists
         if (!postById) {
-            res.status(400).send({message:'Can not find post'})
+            res.status(404).send({message:'Can not find post'})
         }
 
         //check if post is Live
@@ -30,9 +35,11 @@ router.post('/:post_id', verifyToken, async (req, res) => {
                 comments: req.body.comments
             })
             try {
+                //save comments
                 const saveComment = await comment.save()
                 res.send(saveComment)
 
+                //Update Post with the number of comments
                 await Posts.updateOne({
                     _id:postById
                 }, {
@@ -45,8 +52,6 @@ router.post('/:post_id', verifyToken, async (req, res) => {
                 res.send({message: err})
             }
         }
-
-        res.send(postById)
     }
     catch (err) {
         res.send({message:err})
