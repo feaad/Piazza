@@ -1,16 +1,16 @@
 FROM node:20.8-alpine3.18
 
-RUN mkdir -p /home/piazza/app/node_modules && chown -R piazza:piazza /home/piazza/app
+RUN mkdir -p /home/node/app/node_modules && chown -R node:node /home/node/app
 
-WORKDIR /home/piazza/app
+WORKDIR /home/node/app
 
 COPY --chown=node:node package*.json ./
 
-USER piazza
+USER node
 
 RUN npm install
 
-COPY --chown=piazza:piazza . .
+COPY --chown=node:node . .
 
 EXPOSE 3000
 
