@@ -32,25 +32,12 @@ app.use('/api/dislikes', dislikesRoute)
 const commentsRoute = require('./routes/comments')
 app.use('/api/comments', commentsRoute)
 
-//Database connection
-// mongoose.connect(process.env.DB_CONNECTOR).then(() => {
-//     console.log('DB is running...')
-// })
+// Database connection
+mongoose.connect(process.env.DB_CONNECTOR).then(() => {
+    console.log('DB is running...')
+})
 
-const connectDb = async () => {
-    await mongoose.connect(process.env.DB_CONNECTOR).then(
-        () => {
-            console.info(`Connected to database`)
-        },
-        error => {
-            console.error(`Connection error: ${error.stack}`)
-            process.exit(1)
-        }
-    )
-}
 
-connectDb().catch(error => console.error(error))
-
-app.listen(3000, () => {
+app.listen(3001, () => {
     console.log('Server is running...')
 })
