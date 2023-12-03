@@ -1,18 +1,17 @@
-FROM alpine
+FROM node:20-alpine
 
-RUN apk add --update nodejs npm
+RUN mkdir -p /home/node/app/node_modules && chown -R node:node /home/node/app
 
-RUN mkdir -p /home/piazza/node_modules
+WORKDIR /home/node/app
 
-WORKDIR /home/piazza
+COPY --chown=node:node package*.json ./
 
-COPY package*.json ./
+USER node
 
 RUN npm install
 
-COPY . .
+COPY --chown=node:node . .
 
 EXPOSE 3000
-
 
 CMD [ "node", "app.js" ]
