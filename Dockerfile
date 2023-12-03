@@ -1,16 +1,20 @@
-FROM node:20.8-alpine3.18
+FROM alpine
 
-RUN mkdir -p /home/node/app/node_modules && chown -R node:node /home/node/app
+RUN adduser -D -g '' piazza_user
 
-WORKDIR /home/node/app
+RUN apk add --update nodejs npm
 
-COPY --chown=node:node package*.json ./
+RUN mkdir -p /home/piazza/node_modules
 
-USER node
+RUN chown -R piazza_user:piazza_user /home/piazza
+
+WORKDIR /home/piazza
+
+COPY --chown=piazza_user:piazza_user package*.json ./
 
 RUN npm install
 
-COPY --chown=node:node . .
+COPY --chown=piazza_user:piazza_user . .
 
 EXPOSE 3000
 
