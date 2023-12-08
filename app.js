@@ -18,7 +18,7 @@ app.use('/api/topic', topicRoute)
 
 //Route to posts
 const postRoute = require('./routes/posts')
-app.use('/api/post', postRoute)
+app.use('/api/posts', postRoute)
 
 //Route to likes
 const likesRoute = require('./routes/likes')

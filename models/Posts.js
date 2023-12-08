@@ -2,11 +2,11 @@ const mongoose = require("mongoose");
 
 //Creating Post schema
 const postSchema = mongoose.Schema({
-	user_id: {
+	userId: {
 		type: mongoose.Schema.Types.ObjectId,
 	},
 
-	topic_id: {
+	topicId: {
 		type: mongoose.Schema.Types.ObjectId,
 		max: 24,
 		min: 24,
@@ -52,12 +52,12 @@ const postSchema = mongoose.Schema({
 		default: "Live",
 	},
 
-	created_on: {
+	createdOn: {
 		type: Date,
 		required: true,
 		default: Date.now,
 	},
-	expires_on: {
+	expiresOn: {
 		type: Date,
 		required: true,
 	},

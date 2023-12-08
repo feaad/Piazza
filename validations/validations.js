@@ -23,10 +23,10 @@ const loginValidation = (data) => {
 //Validating posts
 const postValidation = (data) => {
     const schemaValidation = joi.object({
-        topic_id: joi.string().required().max(24).min(24),
+        topicId: joi.string().required().max(24).min(24),
         title: joi.string().min(5).max(256).required(),
         message: joi.string().min(3).max(280).required(),
-        expires_on: joi.number().required()
+        expiresOn: joi.number().required()
     })
     return schemaValidation.validate(data)
 }

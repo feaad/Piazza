@@ -24,7 +24,7 @@ const userSchema = mongoose.Schema({
         max: 14
     },
 
-    created_on: {
+    createdOn: {
         type: Date,
         default: Date.now
     }

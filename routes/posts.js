@@ -23,16 +23,16 @@ router.post("/", verifyToken, async (req, res) => {
 	//Set the expiry date according to time
 	const currentDate = new Date();
 	const expiryDate = new Date(
-		currentDate.getTime() + req.body.expires_on * 60000
+		currentDate.getTime() + req.body.expiresOn * 60000
 	);
 
 	const post = new Posts({
-		user_id: req.user._id,
+		userId: req.user._id,
 		author: username,
-		topic_id: req.body.topic_id,
+		topicId: req.body.topicId,
 		title: req.body.title,
 		message: req.body.message,
-		expires_on: expiryDate,
+		expiresOn: expiryDate,
 	});
 
 	//Save the new post in the database
@@ -79,8 +79,8 @@ async function activePost(param, topic) {
 	topic = topic || ""
 	const activePost = param.aggregate()
 		.project({
-			user_id: 1,
-			topic_id: 1,
+			userId: 1,
+			topicId: 1,
 			status: 1,
 			title: 1,
 			message: 1,
@@ -92,16 +92,16 @@ async function activePost(param, topic) {
 		})
 	
 	if (topic !== "") {
-		activePost.match({topic_id: topic.toString} );
+		activePost.match({topicId: topic.toString});
 	}
 
 	activePost.sort({ total: "desc" }).limit(1);
 
 	activePost
 		.project({
-			user_id: 1,
+			userId: 1,
 			status: 1,
-			topic_id: 1,
+			topicId: 1,
 			title: 1,
 			message: 1,
 			likes: 1,
@@ -119,8 +119,8 @@ router.get("/activePost", verifyToken, async (req, res) => {
 });
 
 //Find the most active Post, filtered by topic
-router.get("/activePost/:topic_id", verifyToken, async (req, res) => {
-	const ids = req.params.topic_id
+router.get("/activePost/:topicId", verifyToken, async (req, res) => {
+	const ids = req.params.topicId
 	const active = await activePost(Posts, ids);
 	res.send(active);
 });
@@ -128,8 +128,8 @@ router.get("/activePost/:topic_id", verifyToken, async (req, res) => {
 //Retrieve post with max comments
 router.get("/activePostsByComments", verifyToken, async (req, res) => {
 	try {
-		const test = await Posts.find().sort("-comments").limit(1);
-		res.send(test);
+		const commentPost = await Posts.find().sort("-comments").limit(1);
+		res.send(commentPost);
 	} catch (err) {
 		res.send({ message: err });
 	}
@@ -138,33 +138,31 @@ router.get("/activePostsByComments", verifyToken, async (req, res) => {
 //Retrieve all expired posts
 router.get("/history", verifyToken, async (req, res) => {
 	try {
-		const history = await Posts.find().sort("Expired");
-		res.send(history);
+		const history = await Posts.aggregate().match({ status: "Expired" })
+		res.send(history)
 	} catch (err) {
 		res.send({ message: err });
 	}
 });
 
+
 //Retrieve all expired posts by topic
-router.get("/history/:topic_id", verifyToken, async (req, res) => {
+router.get("/history/:topicId", verifyToken, async (req, res) => {
 	try {
-		const historyPost = await Posts.find({
-			topic_id: req.params.topic_id
-		}).sort("Expired");
+		const tId = {
+			"$oid": req.params.topicId,
+		};
+		const historyPost = await Posts.find({ topicId: req.params.topicId }).where('status').equals("Expired")
 		res.send(historyPost)
-
 	} catch (err) {
-		res.send({message:err})
+		res.send({ message: err })
 	}
-})
-
-
-
+});
 
 // Retrieve all topics
-router.get("/:topic_id", verifyToken, async (req, res) => {
+router.get("/:topicId", verifyToken, async (req, res) => {
 	try {
-		const topic = await Posts.find({ topic_id: req.params.topic_id });
+		const topic = await Posts.find({ topicId: req.params.topicId });
 		res.send(topic);
 	} catch (err) {
 		res.send({ message: err });

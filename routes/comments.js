@@ -7,14 +7,14 @@ const verifyToken = require('../VerifyToken')
 
 const { commentValidation } = require('../validations/validations')
 
-router.post('/:post_id', verifyToken, async (req, res) => {
+router.post('/:postId', verifyToken, async (req, res) => {
     const { error } = commentValidation(req.body);
 		if (error) {
 			return res.status(400).send(error["details"][0]["message"]);
         }
     
     try {
-        const postById = await Posts.findById(req.params.post_id)
+        const postById = await Posts.findById(req.params.postId)
 
         //check if post exists
         if (!postById) {
@@ -28,10 +28,10 @@ router.post('/:post_id', verifyToken, async (req, res) => {
 
         else {
             const currentUser = req.user
-            const commentCount = await Comments.countDocuments({post_id: postById})
+            const commentCount = await Comments.countDocuments({postId: postById})
             const comment = new Comments({
-                post_id: postById,
-                user_id: currentUser._id,
+                postId: postById,
+                userId: currentUser._id,
                 comments: req.body.comments
             })
             try {

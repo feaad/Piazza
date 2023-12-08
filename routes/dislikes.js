@@ -6,11 +6,11 @@ const Likes = require("../models/Likes");
 const Posts = require("../models/Posts");
 const verifyToken = require("../VerifyToken");
 
-router.post("/:post_id", verifyToken, async (req, res) => {
+router.post("/:postId", verifyToken, async (req, res) => {
 	// check if post is available, live and the current user is not the
 	// author of the post
 	try {
-		const postById = await Posts.findById(req.params.post_id);
+		const postById = await Posts.findById(req.params.postId);
 		//check if status is live
 		if (!postById) {
 			return res.status(404).send({ message: "Can not find post" });
@@ -20,23 +20,23 @@ router.post("/:post_id", verifyToken, async (req, res) => {
 			return res.status(405).send({ message: "You can not like your own post" });
 		} else {
 			const currentUser = req.user;
-			const dislikeCount = await Dislikes.countDocuments({ post_id: postById });
-			const likeCount = await Likes.countDocuments({ post_id: postById });
+			const dislikeCount = await Dislikes.countDocuments({ postId: postById });
+			const likeCount = await Likes.countDocuments({ postId: postById });
 
 			const postDislike = await Dislikes.findOne({
-				post_id: postById,
-				user_id: currentUser._id,
+				postId: postById,
+				userId: currentUser._id,
 			});
 
 			const likePost = await Likes.findOne({
-				post_id: postById,
-				user_id: currentUser,
+				postId: postById,
+				userId: currentUser,
 			});
 
 			if (!postDislike) {
 				const newDislike = new Dislikes({
-					post_id: postById,
-					user_id: currentUser._id,
+					postId: postById,
+					userId: currentUser._id,
 				});
 
 				try {
@@ -56,8 +56,8 @@ router.post("/:post_id", verifyToken, async (req, res) => {
 					);
 					//Delete like, if user already liked the post
 					const postLike = await Likes.findOne({
-						post_id: postById,
-						user_id: currentUser._id,
+						postId: postById,
+						userId: currentUser._id,
 					});
 
 					if (postLike) {
@@ -66,7 +66,7 @@ router.post("/:post_id", verifyToken, async (req, res) => {
 						});
 						await Posts.updateOne(
 							{
-								_id: likePost.post_id,
+								_id: likePost.postId,
 							},
 							{
 								$set: {
@@ -88,7 +88,7 @@ router.post("/:post_id", verifyToken, async (req, res) => {
 				});
 				await Posts.updateOne(
 					{
-						_id: postDislike.post_id,
+						_id: postDislike.postId,
 					},
 					{
 						$unset: {

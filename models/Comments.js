@@ -2,11 +2,11 @@ const mongoose = require('mongoose')
 
 // Creating a comments schema
 const commentSchema = mongoose.Schema({
-    post_id: {
+    postId: {
         type: mongoose.Schema.Types.ObjectId
     },
 
-    user_id: {
+    userId: {
         type: mongoose.Schema.Types.ObjectId
     },
 
@@ -16,7 +16,7 @@ const commentSchema = mongoose.Schema({
         max: 255
     },
 
-    created_on: {
+    createdOn: {
         type: Date,
         required: true,
         default: new Date()

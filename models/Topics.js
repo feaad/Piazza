@@ -2,14 +2,14 @@ const mongoose = require('mongoose')
 
 // Creating a comments schema
 const topicSchema = mongoose.Schema({
-    topic_name: {
+    topicName: {
         type: String,
         required: true,
         min: 3,
         max: 255
     },
 
-    created_on: {
+    createdOn: {
         type: Date,
         default: Date.now
     }
