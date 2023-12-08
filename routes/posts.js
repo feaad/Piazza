@@ -75,21 +75,20 @@ router.get("/activePostsByLikes", verifyToken, async (req, res) => {
 });
 
 //Function to calculate and sort likes and dislikes
-async function activePost(param, topic) {
+async function activePost(collection, topic) {
 	topic = topic || ""
-	const activePost = param.aggregate()
-		.project({
-			userId: 1,
-			topicId: 1,
-			status: 1,
-			title: 1,
-			message: 1,
-			likes: 1,
-			dislikes: 1,
-			author: 1,
-			comment: 1,
-			total: { $add: ["$likes", "$dislikes"] },
-		})
+	const activePost = collection.aggregate().project({
+		userId: 1,
+		topicId: 1,
+		status: 1,
+		title: 1,
+		message: 1,
+		likes: 1,
+		dislikes: 1,
+		author: 1,
+		comment: 1,
+		total: { $add: ["$likes", "$dislikes"] },
+	});
 	
 	if (topic !== "") {
 		activePost.match({topicId: topic.toString});
@@ -149,9 +148,6 @@ router.get("/history", verifyToken, async (req, res) => {
 //Retrieve all expired posts by topic
 router.get("/history/:topicId", verifyToken, async (req, res) => {
 	try {
-		const tId = {
-			"$oid": req.params.topicId,
-		};
 		const historyPost = await Posts.find({ topicId: req.params.topicId }).where('status').equals("Expired")
 		res.send(historyPost)
 	} catch (err) {
