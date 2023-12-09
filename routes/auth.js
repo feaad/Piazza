@@ -49,13 +49,13 @@ router.post('/login', async (req, res) => {
     //Check if user exists
     const user = await User.findOne({ email: req.body.email })
     if (!user) {
-        return res.status(400).send({ message: 'User does not exists. Register for a Piazza app' })
+        return res.status(400).send({ message: 'User does not exists. Register for a Piazza account.' })
     }
 
     //Check validity of user password
     const passwordCheck = await bcrypt.compare(req.body.password, user.password)
     if (!passwordCheck) {
-        return res.status(400).send({message: 'Password is invalid'})
+        return res.status(400).send({message: 'Password is invalid.'})
     }
 
     //Authentication Token

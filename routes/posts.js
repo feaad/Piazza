@@ -57,8 +57,8 @@ router.get("/", verifyToken, async (req, res) => {
 //Retrieve post with max dislikes
 router.get("/activePostsByDislikes", verifyToken, async (req, res) => {
 	try {
-		const test = await Posts.find().sort("-dislikes").limit(1);
-		res.send(test);
+		const activeDislikes = await Posts.find().sort("-dislikes").limit(1);
+		res.send(activeDislikes);
 	} catch (err) {
 		res.send({ message: err });
 	}
@@ -67,8 +67,8 @@ router.get("/activePostsByDislikes", verifyToken, async (req, res) => {
 //Retrieve post with max likes
 router.get("/activePostsByLikes", verifyToken, async (req, res) => {
 	try {
-		const test = await Posts.find().sort("-likes").limit(1);
-		res.send(test);
+		const activeLikes = await Posts.find().sort("-likes").limit(1);
+		res.send(activeLikes);
 	} catch (err) {
 		res.send({ message: err });
 	}
@@ -111,7 +111,7 @@ async function activePost(collection, topic) {
 	return activePost;
 }
 
-//Find the most active Posts
+//Find the most active Posts 
 router.get("/activePost", verifyToken, async (req, res) => {
 	const active = await activePost(Posts);
 	res.send(active);

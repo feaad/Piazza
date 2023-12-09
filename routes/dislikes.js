@@ -11,7 +11,6 @@ router.post("/:postId", verifyToken, async (req, res) => {
 	// author of the post
 	try {
 		const postById = await Posts.findById(req.params.postId);
-		//check if status is live
 		if (!postById) {
 			return res.status(404).send({ message: "Can not find post" });
 		} else if (postById.status === "Expired") {
